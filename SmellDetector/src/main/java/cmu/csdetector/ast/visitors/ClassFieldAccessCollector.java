@@ -44,7 +44,6 @@ public class ClassFieldAccessCollector extends CollectorVisitor<IVariableBinding
             IVariableBinding variableBinding = (IVariableBinding) binding;
 
             if (!wasAlreadyCollected(variableBinding) && allVariables.contains(variableBinding)) {
-                System.out.println(node.getFullyQualifiedName());
                 addCollectedNode(variableBinding);
             }
         }
@@ -68,9 +67,4 @@ public class ClassFieldAccessCollector extends CollectorVisitor<IVariableBinding
         return variables;
     }
 
-    //FOR TEST PURPOSE
-    public void print() {
-        System.out.println("allVariables");
-        System.out.println(this.allVariables);
-    }
 }

@@ -1,29 +1,28 @@
 package cmu.csdetector.metrics.calculators.type;
 
 import cmu.csdetector.ast.visitors.ClassFieldAccessCollector;
+import cmu.csdetector.ast.visitors.MethodCollector;
 import cmu.csdetector.metrics.MethodMetricValueCollector;
 import cmu.csdetector.metrics.MetricName;
-import cmu.csdetector.metrics.calculators.MetricValueCalculator;
-import cmu.csdetector.resources.Method;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.*;
 
-public class LCOM2Calculator extends MetricValueCalculator {
+public class LCOM2Calculator extends BaseLCOM{
+
+    public LCOM2Calculator() {
+        super();
+    }
 
     @Override
     protected Double computeValue(ASTNode target) {
-        TypeDeclaration type = (TypeDeclaration)target;
-        ClassFieldAccessCollector collector = new ClassFieldAccessCollector(type);
-        System.out.println();
-        for(MethodDeclaration method: type.getMethods()) {
-            method.accept(collector);
+        this.getInfoForLCOM(target);
+        if(this.getNumOfAttributes() == 0 || this.getNumOfMethods() == 0) {
+            return 0d;
         }
 
-        System.out.println("NodesCollected");
-        System.out.println(collector.getNodesCollected());
-        collector.print();
-        return 1d;
+        double m = (double) getNumOfMethods();
+        double a = (double) getNumOfAttributes();
+        double sumMa = (double) getAccessTimes();
+        return 1 - (sumMa / (m *  a));
     }
 
 
@@ -31,4 +30,5 @@ public class LCOM2Calculator extends MetricValueCalculator {
     public MetricName getMetricName() {
         return MetricName.LCOM2;
     }
+
 }

@@ -2,6 +2,8 @@ package cmu.csdetector.resources;
 
 import cmu.csdetector.metrics.MetricName;
 import cmu.csdetector.resources.loader.SourceFile;
+import cmu.csdetector.smells.Smell;
+import cmu.csdetector.smells.SmellName;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
@@ -18,6 +20,8 @@ public abstract class Resource extends Observable {
     private transient ASTNode node;
 
     private String kind;
+
+    private List<Smell> smells;
 
     public Resource(SourceFile sourceFile, ASTNode node) {
         this.metricsValues = new HashMap<>();
@@ -80,4 +84,17 @@ public abstract class Resource extends Observable {
         this.fullyQualifiedName = fullyQualifiedName;
     }
 
+    public void addAllSmells(Collection<Smell> smells) {
+        this.smells.addAll(smells);
+    }
+
+    public boolean hasSmell(SmellName targetSmell) {
+        for(Smell smell : this.smells) {
+            if(smell.getName().equals(targetSmell)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
